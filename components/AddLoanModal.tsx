@@ -55,20 +55,20 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ isOpen, onClose, onSuccess 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-          <h2 className="text-xl font-bold text-gray-800">New Loan Application</h2>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-100 bg-gray-50">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">New Loan Application</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors">
             <X size={20} className="text-gray-500" />
           </button>
         </div>
 
-        <div className="overflow-y-auto p-6">
+        <div className="overflow-y-auto p-4 sm:p-6">
           <form id="addLoanForm" onSubmit={handleSubmit} className="space-y-6">
             {/* Borrower Section */}
             <div>
-              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 border-l-4 border-blue-500 pl-2">Borrower Details</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 border-l-4 border-blue-500 pl-2">Borrower Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -95,7 +95,7 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ isOpen, onClose, onSuccess 
 
             {/* Loan Section */}
             <div>
-              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 border-l-4 border-emerald-500 pl-2">Loan Terms</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 border-l-4 border-emerald-500 pl-2">Loan Terms</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Loan Amount (₹)</label>
@@ -115,11 +115,11 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ isOpen, onClose, onSuccess 
           </form>
         </div>
 
-        <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-200 rounded-lg transition-colors">
+        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 safe-area-bottom">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-200 rounded-lg transition-colors text-sm sm:text-base">
             Cancel
           </button>
-          <button type="submit" form="addLoanForm" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors">
+          <button type="submit" form="addLoanForm" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors text-sm sm:text-base">
             Create Loan
           </button>
         </div>
