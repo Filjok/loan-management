@@ -21,10 +21,13 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ isOpen, onClose, onSuccess 
     startDate: new Date().toISOString().split('T')[0]
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const borrower: Borrower = {
       id: crypto.randomUUID(),
       name: formData.name,
@@ -39,15 +42,21 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ isOpen, onClose, onSuccess 
     const annualRate = parseFloat(formData.interestRate);
     const monthlyRate = annualRate / 12;
 
-    createLoan(
-      borrower,
-      parseFloat(formData.amount),
-      monthlyRate,
-      formData.startDate
-    );
-
-    onSuccess();
-    onClose();
+    try {
+      await createLoan(
+        borrower,
+        parseFloat(formData.amount),
+        monthlyRate,
+        formData.startDate
+      );
+      onSuccess();
+      onClose();
+    } catch (err) {
+      console.error('Failed to create loan', err);
+      alert('Failed to create loan. See console for details.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -119,8 +128,8 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ isOpen, onClose, onSuccess 
           <button type="button" onClick={onClose} className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-200 rounded-lg transition-colors text-sm sm:text-base">
             Cancel
           </button>
-          <button type="submit" form="addLoanForm" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors text-sm sm:text-base">
-            Create Loan
+          <button type="submit" form="addLoanForm" disabled={isSubmitting} className={`px-6 py-2 ${isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'} text-white font-medium rounded-lg shadow-sm transition-colors text-sm sm:text-base`}>
+            {isSubmitting ? 'Creating...' : 'Create Loan'}
           </button>
         </div>
       </div>
