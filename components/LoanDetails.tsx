@@ -43,27 +43,39 @@ const LoanDetails: React.FC<LoanDetailsProps> = ({ loanId, onBack }) => {
   const [analysis, setAnalysis] = useState<LoanAnalysis | null>(null);
 
   useEffect(() => {
-    const data = getLoanById(loanId);
-    setLoan(data);
+    (async () => {
+      try {
+        const data = await getLoanById(loanId);
+        setLoan(data ?? undefined);
+      } catch (err) {
+        console.error('Failed to load loan', err);
+        setLoan(undefined);
+      }
+    })();
   }, [loanId]);
 
   if (!loan) return <div className="p-10 text-center">Loading...</div>;
 
-  const handlePayment = (e: React.FormEvent) => {
+  const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount) return;
 
     // Check if date is valid relative to last payment
-    const lastDate = new Date(loan.lastPaymentDate || loan.startDate);
+    const lastDate = new Date(loan!.lastPaymentDate || loan!.startDate);
     const payDate = new Date(date);
     if (payDate < lastDate) {
       alert("Payment date cannot be before the last payment date.");
       return;
     }
 
-    const updatedLoan = addPayment(loan.id, parseFloat(amount), date);
-    setLoan({ ...updatedLoan }); // Force refresh
-    setAmount("");
+    try {
+      const updatedLoan = await addPayment(loan!.id, parseFloat(amount), date);
+      setLoan({ ...updatedLoan }); // Force refresh
+      setAmount("");
+    } catch (err) {
+      console.error('Failed to add payment', err);
+      alert('Failed to record payment. See console for details.');
+    }
   };
 
   // Prepare chart data

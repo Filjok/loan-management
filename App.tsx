@@ -48,8 +48,13 @@ const Dashboard = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState("");
 
-  const refreshLoans = () => {
-    setLoans(getLoans());
+  const refreshLoans = async () => {
+    try {
+      const data = await getLoans();
+      setLoans(data);
+    } catch (err) {
+      console.error('Failed to load loans', err);
+    }
   };
 
   useEffect(() => {
@@ -165,7 +170,14 @@ const HistoryPage = ({
   const [loans, setLoans] = useState<Loan[]>([]);
 
   useEffect(() => {
-    setLoans(getLoans().filter((l) => l.status === LoanStatus.COMPLETED));
+    (async () => {
+      try {
+        const all = await getLoans();
+        setLoans(all.filter((l) => l.status === LoanStatus.COMPLETED));
+      } catch (err) {
+        console.error('Failed to load completed loans', err);
+      }
+    })();
   }, []);
 
   return (
